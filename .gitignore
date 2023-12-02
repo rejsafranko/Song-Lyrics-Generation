@@ -1,2 +1,7 @@
-data
-models
+data/interim/merged_data.csv
+data/raw/csv/lyrics-data.csv
+data/raw/txt/*
+!data/raw/txt/.gitkeep
+
+models/*
+!models/.gitkeep
