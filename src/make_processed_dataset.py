@@ -62,6 +62,7 @@ def process_dataset(df):
     df = df[df["number_of_words"] > 1]
     # Balance the number of words.
     df_balancing = df[df["number_of_words"] > 3422]
+    df_balancing = df_balancing.drop(["number_of_words"], axis=1)
     df_balancing.reset_index(drop=True, inplace=True)
     new_rows = []
     for idx, row in df_balancing.iterrows():
@@ -70,16 +71,17 @@ def process_dataset(df):
     # Concatenate the datasets.
     df_part_one = df[df["number_of_words"] <= 3422]
     df_part_two = new_rows
-
-    df_part_one.drop(["number_of_words"], axis=1)
-    df = pd.concat([df_part_one, df_part_two])
+    df_part_one = df_part_one.drop(["number_of_words"], axis=1)
+    df_part_one.reset_index(drop=True, inplace=True)
+    df_part_two.reset_index(drop=True, inplace=True)
+    df = pd.concat([df_part_one, df_part_two], axis=0, ignore_index=True)
     df = df.sample(frac=1)
     df.reset_index(drop=True, inplace=True)
     return df
 
 
 def main(args):
-    df = pd.read_csv(args.interim_path)
+    df = pd.read_csv(args.interim_path, index_col=[0])
     save_path = os.path.join("data/processed", "dataset.csv")
     processed_df = process_dataset(df)
     processed_df.to_csv(save_path)
