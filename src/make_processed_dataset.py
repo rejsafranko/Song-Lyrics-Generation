@@ -55,11 +55,15 @@ def split_lyrics(row, chunk_size=250):
     return new_rows
 
 
-def process_dataset(df):
+def process_dataset(df: pd.DataFrame):
     df["Lyric"] = df["Lyric"].apply(format_lyric)
     df["number_of_words"] = df["Lyric"].apply(lambda x: len(str(x).split()))
     # Delete useless row with no lyrics.
     df = df[df["number_of_words"] > 1]
+    # Remove special characters.
+    df["Lyric"] = df["Lyric"].apply(
+        lambda x: re.sub(r"[^a-zA-Z0-9\n .!?]", " ", str(x))
+    )
     # Balance the number of words.
     df_balancing = df[df["number_of_words"] > 3422]
     df_balancing = df_balancing.drop(["number_of_words"], axis=1)

@@ -57,7 +57,7 @@ def build_model(total_words, max_sequence_len):
 
 def main():
     dataset, total_words, max_sequence_len = prepare_dataset(
-        "../data/preprocessed_lstm/train.csv"
+        "../data/processed/train_lstm.csv"
     )
     model = build_model(total_words, max_sequence_len)
 
@@ -74,7 +74,7 @@ def main():
         callbacks=[earlystop],
     )
 
-    model.save('../models/lstm_lyrics_generator.h5')
+    model.save("../models/lstm_lyrics_generator.h5")
 
 
 if __name__ == "__main__":
