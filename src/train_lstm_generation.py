@@ -2,6 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 import wandb
+import pickle
 from tqdm import tqdm
 import keras
 from keras.preprocessing.sequence import pad_sequences
@@ -30,6 +31,10 @@ def preprocess_dataset(dataset_path):
 
     total_words = len(tokenizer.word_index) + 1
     tokenized_sentences = tokenizer.text_to_sequences(df["lyrics"].astype(str))
+
+    tokenizer_save_path = os.path.join("models/lstm/", 'tokenizer.pkl')
+    with open(tokenizer_save_path, 'wb') as f:
+        pickle.dump(tokenizer, f)
 
     # Slash sequences into n gram sequence.
     sequence_generator = generate_sequences(tokenized_sentences)
@@ -74,8 +79,14 @@ def build_model(total_words, max_sequence_len):
 
 def main():
     dataset, total_words, max_sequence_len = preprocess_dataset(
-        "../data/processed/dataset.csv"
+        "data/processed/dataset.csv"
     )
+
+    with open("data/processed/lstm_parameters.txt", "w") as file:
+        file.write(f"Total Words: {total_words}\n")
+        file.write(f"Max Sequence Length: {max_sequence_len}")
+        file.close()
+
     model = build_model(total_words, max_sequence_len)
 
     # EarlyStopping Callback.
@@ -98,7 +109,7 @@ def main():
 
     wandb.finish()
 
-    model.save("../models/lstm_lyrics_generator.h5")
+    model.save("models/lstm/lstm_lyrics_generator.h5")
 
 
 if __name__ == "__main__":
