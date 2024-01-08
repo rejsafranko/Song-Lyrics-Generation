@@ -1,3 +1,4 @@
+import numpy as np
 import tensorflow as tf
 import pickle
 from keras.preprocessing.sequence import pad_sequences
@@ -27,11 +28,13 @@ def complete_the_song(seed_text, next_words, tokenizer, model, max_sequence_len)
     for _ in range(next_words):
         token_list = tokenizer.texts_to_sequences([seed_text])[0]
         token_list = pad_sequences([token_list], maxlen=max_sequence_len-1, padding='pre')
-        predicted = model.predict_classes(token_list, verbose=0)
+        
+        predictions = model.predict(token_list, verbose=0)
+        predicted_class_index = np.argmax(predictions)
         
         output_word = ""
         for word, index in tokenizer.word_index.items():
-            if index == predicted:
+            if index == predicted_class_index:
                 output_word = word
                 break
         seed_text += " " + output_word
