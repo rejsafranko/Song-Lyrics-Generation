@@ -1,5 +1,8 @@
+import os
 import numpy as np
 import pandas as pd
+import wandb
+from tqdm import tqdm
 import keras
 from keras.preprocessing.sequence import pad_sequences
 from keras.layers import Embedding, Dropout, LSTM, Dense, Bidirectional
@@ -7,9 +10,18 @@ from keras.preprocessing.text import Tokenizer
 from keras.callbacks import EarlyStopping
 from keras.models import Sequential
 
+from dotenv import load_dotenv
+load_dotenv()
+wandb_key = os.getenv("WANDB_API_KEY")
 
-def prepare_dataset(dataset_path):
-    # Load preprocessed dataset for LSTM.
+def generate_sequences(tokenized_sentences):
+    for i in tqdm(tokenized_sentences, desc="Generating sequences"):
+        for t in range(1, len(i)):
+            n_gram_sequence = i[: t + 1]
+            yield n_gram_sequence
+
+def preprocess_dataset(dataset_path):
+    # Load processed dataset.
     df = pd.read_csv(dataset_path)
 
     # Tokenization.
@@ -20,17 +32,22 @@ def prepare_dataset(dataset_path):
     tokenized_sentences = tokenizer.text_to_sequences(df["lyrics"].astype(str))
 
     # Slash sequences into n gram sequence.
-    input_sequences = list()
-    for i in tokenized_sentences:
-        for t in range(1, len(i)):
-            n_gram_sequence = i[: t + 1]
-            input_sequences.append(n_gram_sequence)
+    sequence_generator = generate_sequences(tokenized_sentences)
 
-    # Pre-padding.
-    max_sequence_len = max([len(x) for x in input_sequences])
-    input_sequences = np.array(
-        pad_sequences(input_sequences, maxlen=max_sequence_len, padding="pre")
-    )
+    # Find the maximum sequence length.
+    max_sequence_len = max(len(seq) for seq in tqdm(sequence_generator, desc="Calculating max sequence length"))
+
+    # Create a new generator for sequences.
+    sequence_generator = generate_sequences(tokenized_sentences)
+
+    # Pad sequences in smaller batches to save memory.
+    batch_size = 1000
+    padded_sequences = []
+
+    for batch in tqdm(iter(lambda: list(sequence_generator)[:batch_size], []), desc="Padding sequences"):
+        padded_sequences.extend(keras.preprocessing.sequence.pad_sequences(batch, maxlen=max_sequence_len, padding="pre"))
+
+    input_sequences = np.array(padded_sequences)
 
     # Create predictors and labels.
     X, labels = input_sequences[:, :-1], input_sequences[:, -1]
@@ -56,8 +73,8 @@ def build_model(total_words, max_sequence_len):
 
 
 def main():
-    dataset, total_words, max_sequence_len = prepare_dataset(
-        "../data/processed/train_lstm.csv"
+    dataset, total_words, max_sequence_len = preprocess_dataset(
+        "../data/processed/dataset.csv"
     )
     model = build_model(total_words, max_sequence_len)
 
@@ -66,13 +83,20 @@ def main():
         monitor="loss", min_delta=0, patience=3, verbose=0, mode="auto"
     )
 
+    # Set up wandb monitoring for the training process.
+    wandb.login(key=wandb_key)
+    run = wandb.init(project="Training LSTM for Lyrics Generation", job_type="training", anonymous="allow")
+    wandb_callback = wandb.keras.WandbCallback()
+
     model.fit(
         dataset["features"],
         dataset["labels"],
         epochs=10,
         verbose=1,
-        callbacks=[earlystop],
+        callbacks=[earlystop, wandb_callback],
     )
+
+    wandb.finish()
 
     model.save("../models/lstm_lyrics_generator.h5")
 

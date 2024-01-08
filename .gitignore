@@ -8,5 +8,7 @@ data/interim/*
 data/processed/*
 !data/processed/.gitkeep
 
-models/*
-!models/.gitkeep
+models/lstm/*
+!models/lstm/.gitkeep
+
+.env
