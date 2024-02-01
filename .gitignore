@@ -8,7 +8,16 @@ data/interim/*
 data/processed/*
 !data/processed/.gitkeep
 
-models/lstm/*
-!models/lstm/.gitkeep
+models/bilstm/*
+!models/bilstm/.gitkeep
+
+models/gpt2/*
+!models/gpt2/.gitkeep
+
+models/vae/*
+!models/vae/.gitkeep
+
+models/tinyllama/*
+!models/tinyllama/.gitkeep
 
 .env

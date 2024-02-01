@@ -1,6 +1,15 @@
 pandas
 numpy
+torch
 wandb
 tensorflow
 matplotlib
 seaborn
+trl
+transformers
+datasets
+accelerate 
+bitsandbytes
+einops
+dotenv
+git+https://github.com/huggingface/peft.git

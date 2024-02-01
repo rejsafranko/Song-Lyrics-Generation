@@ -5,23 +5,27 @@ import wandb
 import pickle
 from tqdm import tqdm
 import keras
-from keras.preprocessing.sequence import pad_sequences
 from keras.layers import Embedding, Dropout, LSTM, Dense, Bidirectional
 from keras.preprocessing.text import Tokenizer
 from keras.callbacks import EarlyStopping
 from keras.models import Sequential
-
 from dotenv import load_dotenv
+
 load_dotenv()
 wandb_key = os.getenv("WANDB_API_KEY")
 
+
 def generate_sequences(tokenized_sentences):
+    """Sequence generation utility function."""
     for i in tqdm(tokenized_sentences, desc="Generating sequences"):
         for t in range(1, len(i)):
             n_gram_sequence = i[: t + 1]
             yield n_gram_sequence
 
-def preprocess_dataset(dataset_path):
+
+def preprocess_dataset(dataset_path: str):
+    """Utility function which loads a dataset, tokenizes the lyrics, creates n-grams and generates sequences in batches
+    for speed and memory optimization."""
     # Load processed dataset.
     df = pd.read_csv(dataset_path)
 
@@ -32,15 +36,18 @@ def preprocess_dataset(dataset_path):
     total_words = len(tokenizer.word_index) + 1
     tokenized_sentences = tokenizer.text_to_sequences(df["lyrics"].astype(str))
 
-    tokenizer_save_path = os.path.join("models/lstm/", 'tokenizer.pkl')
-    with open(tokenizer_save_path, 'wb') as f:
+    tokenizer_save_path = os.path.join("models/lstm/", "tokenizer.pkl")
+    with open(tokenizer_save_path, "wb") as f:
         pickle.dump(tokenizer, f)
 
-    # Slash sequences into n gram sequence.
+    # Slash sequences into n-gram sequence.
     sequence_generator = generate_sequences(tokenized_sentences)
 
     # Find the maximum sequence length.
-    max_sequence_len = max(len(seq) for seq in tqdm(sequence_generator, desc="Calculating max sequence length"))
+    max_sequence_len = max(
+        len(seq)
+        for seq in tqdm(sequence_generator, desc="Calculating max sequence length")
+    )
 
     # Create a new generator for sequences.
     sequence_generator = generate_sequences(tokenized_sentences)
@@ -49,8 +56,15 @@ def preprocess_dataset(dataset_path):
     batch_size = 1000
     padded_sequences = []
 
-    for batch in tqdm(iter(lambda: list(sequence_generator)[:batch_size], []), desc="Padding sequences"):
-        padded_sequences.extend(keras.preprocessing.sequence.pad_sequences(batch, maxlen=max_sequence_len, padding="pre"))
+    for batch in tqdm(
+        iter(lambda: list(sequence_generator)[:batch_size], []),
+        desc="Padding sequences",
+    ):
+        padded_sequences.extend(
+            keras.preprocessing.sequence.pad_sequences(
+                batch, maxlen=max_sequence_len, padding="pre"
+            )
+        )
 
     input_sequences = np.array(padded_sequences)
 
@@ -66,6 +80,8 @@ def preprocess_dataset(dataset_path):
 
 
 def build_model(total_words, max_sequence_len):
+    """Utility function which builds a BiLSTM model and configures the loss
+    and optimization algorithm."""
     model = Sequential()
     model.add(Embedding(total_words, 40, input_length=max_sequence_len - 1))
     model.add(Bidirectional(LSTM(250)))
@@ -96,7 +112,11 @@ def main():
 
     # Set up wandb monitoring for the training process.
     wandb.login(key=wandb_key)
-    run = wandb.init(project="Training LSTM for Lyrics Generation", job_type="training", anonymous="allow")
+    run = wandb.init(
+        project="Training LSTM for Lyrics Generation",
+        job_type="training",
+        anonymous="allow",
+    )
     wandb_callback = wandb.keras.WandbCallback()
 
     model.fit(
