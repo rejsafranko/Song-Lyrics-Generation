@@ -17,7 +17,7 @@ This research project aims to create song lyric generators using various deep le
 The models were trained on a song lyric datset created from 2 different data sources and evaluated through human assessments to ensure the generated lyrics are meaningful and stylistically accurate.
 
 ## Project Structure
-
+```
 .
 ├── data
 │ ├── raw # Raw dataset files
@@ -34,7 +34,7 @@ The models were trained on a song lyric datset created from 2 different data sou
 │ └── project documentation.pdf # Research report in Croatian
 ├── README.md # Project README file
 └── requirements.txt # Python dependencies
-
+```
 
 ## Models Used
 
