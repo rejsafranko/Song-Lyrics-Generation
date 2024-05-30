@@ -9,7 +9,6 @@ Welcome to the Song Lyric Generation project! This repository contains the code 
 - [Data Preprocessing](#data-preprocessing)
 - [Evaluation](#evaluation)
 - [How to Use](#how-to-use)
-- [Contributing](#contributing)
 - [License](#license)
 
 ## Introduction
@@ -61,6 +60,8 @@ The models were evaluated using human evaluations. We focused on the meaningfuln
 - Coherence and fluency of the lyrics
 - Stylistic resemblance to the target singer (for specific singer models)
 - Overall creativity and originality
+
+In our report we also provide GPT-4 evaluation to compare how a SOTA large language model evaluates a task only humans can effectively evaluate.
 
 ## How to Use
 
