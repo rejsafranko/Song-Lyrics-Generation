@@ -85,3 +85,8 @@ Run training and inference scripts:
 ```python src/train/train_[model]_[task].py -csv_file_path data/raw/csv/lyrics-data.csv -txt_dir_path data/raw/txt```
 
 ```python src/train/inference_[model]_[task].py --seed_text [text] <--next_words [number of words to generate]>```
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
