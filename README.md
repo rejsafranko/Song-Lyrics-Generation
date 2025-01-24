@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/4f283df4-9e35-4092-a09c-91c0b4bcf64b)# Song Lyric Generation with Deep Models
+# Song Lyric Generation with Deep Models
 
 Welcome to the Song Lyric Generation project! This repository contains the code and resources for an NLP research project focused on generating song lyrics using deep learning models. Our goal is to explore different models and techniques to generate lyrics that can mimic specific singer's styles as well as produce generic lyrics.
 
