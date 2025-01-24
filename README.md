@@ -1,4 +1,4 @@
-# Song Lyric Generation with Deep Models
+![image](https://github.com/user-attachments/assets/4f283df4-9e35-4092-a09c-91c0b4bcf64b)# Song Lyric Generation with Deep Models
 
 Welcome to the Song Lyric Generation project! This repository contains the code and resources for an NLP research project focused on generating song lyrics using deep learning models. Our goal is to explore different models and techniques to generate lyrics that can mimic specific singer's styles as well as produce generic lyrics.
 
@@ -40,7 +40,12 @@ The models were trained on a song lyric datset created from 2 different data sou
 
 ### Generic Lyric Generation
 1. **BiLSTM**: A Bidirectional Long Short-Term Memory model used for sequential data processing.
+
+![BiLSTM](bilstm.png)
+
 2. **Variational Autoencoder (VAE)**: A generative model that learns to represent data in a latent space.
+
+![VAE](vae.jpg)
 
 ### Specific Singer Style Generation
 1. **GPT-2**: A powerful transformer-based model pre-trained on a large corpus of text, fine-tuned to mimic a specific singer's style.
