@@ -49,7 +49,12 @@ The models were trained on a song lyric datset created from 2 different data sou
 
 ### Specific Singer Style Generation
 1. **GPT-2**: A powerful transformer-based model pre-trained on a large corpus of text, fine-tuned to mimic a specific singer's style.
+
+<img src="transformer.png" alt="Transformer" width="300" height="400">
+
 2. **TinyLlama**: A smaller, efficient model similar to GPT-2, optimized for stylistic lyric generation.
+
+<img src="tinyllama.png" alt="Tiny LLama" width="400" height="300">
 
 ## Data Preprocessing
 
@@ -67,6 +72,8 @@ The models were evaluated using human evaluations. We focused on the meaningfuln
 - Overall creativity and originality
 
 In our report we also provide GPT-4 evaluation to compare how a SOTA large language model evaluates a task only humans can effectively evaluate.
+
+<img src="output.png" alt="Output Example" width="400" height="300">
 
 ## How to Use
 
