@@ -45,7 +45,7 @@ The models were trained on a song lyric datset created from 2 different data sou
 
 2. **Variational Autoencoder (VAE)**: A generative model that learns to represent data in a latent space.
 
-![VAE](vae.jpg)
+<img src="vae.jpg" alt="VAE" width="400" height="300">
 
 ### Specific Singer Style Generation
 1. **GPT-2**: A powerful transformer-based model pre-trained on a large corpus of text, fine-tuned to mimic a specific singer's style.
