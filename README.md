@@ -41,7 +41,9 @@ The models were trained on a song lyric datset created from 2 different data sou
 ### Generic Lyric Generation
 1. **BiLSTM**: A Bidirectional Long Short-Term Memory model used for sequential data processing.
 
+<div align="center">
 <img src="bilstm.png" alt="BiLSTM" width="400" height="300">
+</div>
 
 2. **Variational Autoencoder (VAE)**: A generative model that learns to represent data in a latent space.
 
