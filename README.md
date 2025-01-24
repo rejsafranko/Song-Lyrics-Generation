@@ -47,16 +47,22 @@ The models were trained on a song lyric datset created from 2 different data sou
 
 2. **Variational Autoencoder (VAE)**: A generative model that learns to represent data in a latent space.
 
+<div align="center">
 <img src="vae.jpg" alt="VAE" width="400" height="300">
+</div>
 
 ### Specific Singer Style Generation
 1. **GPT-2**: A powerful transformer-based model pre-trained on a large corpus of text, fine-tuned to mimic a specific singer's style.
 
+<div align="center">
 <img src="transformer.png" alt="Transformer" width="300" height="400">
+</div>
 
 2. **TinyLlama**: A smaller, efficient model similar to GPT-2, optimized for stylistic lyric generation.
 
+<div align="center">
 <img src="tinyllama.png" alt="Tiny LLama" width="400" height="300">
+</div>
 
 ## Data Preprocessing
 
@@ -75,7 +81,9 @@ The models were evaluated using human evaluations. We focused on the meaningfuln
 
 In our report we also provide GPT-4 evaluation to compare how a SOTA large language model evaluates a task only humans can effectively evaluate.
 
+<div align="center">
 <img src="output.png" alt="Output Example" width="400" height="300">
+</div>
 
 ## How to Use
 
